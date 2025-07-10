@@ -11,60 +11,62 @@ const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const { documents, currentDocument } = usePDFEditor();
 
-  if (!user) {
-    return <div>Please log in to access the dashboard.</div>;
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user.name}</h1>
-          <p className="text-gray-600 mt-2">Manage your PDF documents and edits</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {user ? `Welcome back, ${user.name}` : 'PDF Editor'}
+          </h1>
+          <p className="text-gray-600 mt-2">
+            {user ? 'Manage your PDF documents and edits' : 'Upload and edit your PDF documents'}
+          </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Crown className={`h-8 w-8 ${user.isPremium ? 'text-yellow-500' : 'text-gray-400'}`} />
+        {user && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <Card className="p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Crown className={`h-8 w-8 ${user.isPremium ? 'text-yellow-500' : 'text-gray-400'}`} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Plan</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {user.isPremium ? 'Premium' : 'Free'}
+                  </p>
+                </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Plan</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {user.isPremium ? 'Premium' : 'Free'}
-                </p>
-              </div>
-            </div>
-          </Card>
+            </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Edit className="h-8 w-8 text-blue-500" />
+            <Card className="p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Edit className="h-8 w-8 text-blue-500" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Edits Used</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {user.isPremium ? 'Unlimited' : `${user.editsUsed}/${user.maxEdits}`}
+                  </p>
+                </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Edits Used</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {user.isPremium ? 'Unlimited' : `${user.editsUsed}/${user.maxEdits}`}
-                </p>
-              </div>
-            </div>
-          </Card>
+            </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <FileText className="h-8 w-8 text-green-500" />
+            <Card className="p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <FileText className="h-8 w-8 text-green-500" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Documents</p>
+                  <p className="text-2xl font-bold text-gray-900">{documents.length}</p>
+                </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Documents</p>
-                <p className="text-2xl font-bold text-gray-900">{documents.length}</p>
-              </div>
-            </div>
-          </Card>
-        </div>
+            </Card>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -79,7 +81,8 @@ const Dashboard: React.FC = () => {
           <div className="space-y-6">
             <EditingTools />
             
-            {/* Document List */}
+            {/* Document List - Only show for logged in users */}
+            {user && (
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Documents</h3>
               {documents.length > 0 ? (
@@ -104,6 +107,7 @@ const Dashboard: React.FC = () => {
                 <p className="text-gray-500 text-center py-4">No documents yet</p>
               )}
             </Card>
+            )}
           </div>
         </div>
       </div>
