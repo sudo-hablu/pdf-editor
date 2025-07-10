@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { usePDFEditor } from '../hooks/usePDFEditor';
 import PDFUploader from '../components/editor/PDFUploader';
-import PDFViewer from '../components/editor/PDFViewer';
+import PDFEditor from '../components/editor/PDFEditor';
 import EditingTools from '../components/editor/EditingTools';
 import Card from '../components/ui/Card';
 import { Crown, FileText, Edit, Calendar } from 'lucide-react';
@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             {currentDocument ? (
-              <PDFViewer document={currentDocument} />
+              <PDFEditor document={currentDocument} />
             ) : (
               <PDFUploader />
             )}
