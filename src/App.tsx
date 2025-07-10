@@ -30,6 +30,7 @@ const AppContent: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/editor" element={<Dashboard />} />
           <Route
             path="/dashboard"
             element={

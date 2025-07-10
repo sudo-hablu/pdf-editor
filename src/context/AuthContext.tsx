@@ -8,6 +8,9 @@ interface AuthContextType {
   logout: () => void;
   updateUser: (updates: Partial<User>) => void;
   isLoading: boolean;
+  guestEditsUsed: number;
+  updateGuestEdits: (edits: number) => void;
+  maxGuestEdits: number;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,6 +30,8 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [guestEditsUsed, setGuestEditsUsed] = useState(0);
+  const maxGuestEdits = 3;
 
   useEffect(() => {
     // Check for stored user session
@@ -34,6 +39,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    
+    // Check for guest edits
+    const storedGuestEdits = localStorage.getItem('guestEditsUsed');
+    if (storedGuestEdits) {
+      setGuestEditsUsed(parseInt(storedGuestEdits, 10));
+    }
+    
     setIsLoading(false);
   }, []);
 
@@ -101,6 +113,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const updateGuestEdits = (edits: number) => {
+    setGuestEditsUsed(edits);
+    localStorage.setItem('guestEditsUsed', edits.toString());
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -109,7 +125,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         register,
         logout,
         updateUser,
-        isLoading
+        isLoading,
+        guestEditsUsed,
+        updateGuestEdits,
+        maxGuestEdits
       }}
     >
       {children}

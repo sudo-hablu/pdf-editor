@@ -4,7 +4,7 @@ import { FileText, User, LogOut, Crown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Header: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, guestEditsUsed, maxGuestEdits } = useAuth();
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
@@ -45,6 +45,9 @@ const Header: React.FC = () => {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600">
+                {maxGuestEdits - guestEditsUsed} free edits left
+              </span>
               <Link
                 to="/login"
                 className="text-gray-700 hover:text-gray-900 transition-colors"

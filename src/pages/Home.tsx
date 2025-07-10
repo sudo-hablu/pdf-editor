@@ -67,9 +67,9 @@ const Home: React.FC = () => {
               then upgrade for unlimited editing power.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
+              <Link to="/editor">
                 <Button size="lg" className="min-w-[200px]">
-                  Start Free Trial
+                  Try Free Now
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -178,9 +178,9 @@ const Home: React.FC = () => {
             <p className="text-xl text-blue-100 mb-8">
               Join thousands of professionals who trust PDFEdit Pro for their document editing needs.
             </p>
-            <Link to="/register">
+            <Link to="/editor">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                Get Started Free
+                Try Free Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>

@@ -1,11 +1,14 @@
 import React from 'react';
 import { Type, MessageSquare, Image, Highlighter, Eraser, Save } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import { usePDFEditor } from '../../hooks/usePDFEditor';
+import { useAuth } from '../../context/AuthContext';
 
 const EditingTools: React.FC = () => {
   const { consumeEdit, canEdit, getRemainingEdits } = usePDFEditor();
+  const { user } = useAuth();
 
   const tools = [
     { id: 'text', icon: Type, label: 'Add Text', editType: 'text' as const },
@@ -59,12 +62,30 @@ const EditingTools: React.FC = () => {
 
       {!canEdit() && (
         <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
-            You've reached your free edit limit. 
-            <a href="/pricing" className="font-medium text-yellow-900 hover:underline ml-1">
-              Upgrade to Premium
-            </a> for unlimited edits.
-          </p>
+          {user ? (
+            <p className="text-sm text-yellow-800">
+              You've reached your free edit limit. 
+              <Link to="/pricing" className="font-medium text-yellow-900 hover:underline ml-1">
+                Upgrade to Premium
+              </Link> for unlimited edits.
+            </p>
+          ) : (
+            <div className="text-sm text-yellow-800">
+              <p className="mb-2">You've used all 3 free edits!</p>
+              <div className="flex space-x-2">
+                <Link to="/register">
+                  <Button size="sm" className="text-xs">
+                    Sign Up Free
+                  </Button>
+                </Link>
+                <Link to="/pricing">
+                  <Button variant="outline" size="sm" className="text-xs">
+                    View Plans
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </Card>
